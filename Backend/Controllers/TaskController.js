@@ -272,13 +272,4 @@ export const deleteTask = async (req, res) => {
   }
 };
 
-// export const compelteTask = async (req, res) => {
-//   try {
-//     const {} = req.body;
-//   } catch (error) {
-//     return res.status(500).json({
-//       success: false,
-//       message: error.message,
-//     });
-//   }
-// };
+

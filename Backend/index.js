@@ -4,7 +4,14 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import { currentuser, login, register } from "./Controllers/UserController.js";
-import { addTask, getEditTask, myTask, updateTask } from "./Controllers/TaskController.js";
+import {
+  addTask,
+  deleteTask,
+  getEditTask,
+  myTask,
+  updateTask,
+} from "./Controllers/TaskController.js";
+import { UserMiddleWare } from "./Middlewares/UserMiddleWare.js";
 
 const app = express();
 dotenv.config();
@@ -20,10 +27,11 @@ app.post("/currentuser", currentuser);
 
 // Task Routes
 
-app.post("/addtask", addTask);
-app.post("/mytask", myTask);
-app.post("/getedittask", getEditTask);
-app.post("/updatetask", updateTask);
+app.post("/addtask", UserMiddleWare, addTask);
+app.post("/mytask", UserMiddleWare, myTask);
+app.post("/getedittask", UserMiddleWare, getEditTask);
+app.post("/updatetask", UserMiddleWare, updateTask);
+app.post("/deletetask", UserMiddleWare, deleteTask);
 
 mongoose
   .connect(process.env.MONGO_URL)
