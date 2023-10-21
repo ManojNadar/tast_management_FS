@@ -19,14 +19,7 @@ const NavSection = () => {
 
   const menuItems = [
     "Profile",
-    "Dashboard",
-    "Activity",
-    "Analytics",
     "System",
-    "Deployments",
-    "My Settings",
-    "Team Settings",
-    "Help & Feedback",
     "Log Out",
   ];
   return (
@@ -53,25 +46,22 @@ const NavSection = () => {
             <p className="font-bold text-inherit">Task Management</p>
           </NavbarBrand>
           <NavbarItem>
-            <Link href="#">All Task</Link>
+            <Link>All Task</Link>
           </NavbarItem>
           <NavbarItem>
-            <Link color="success" href="#">
-              Completed
-            </Link>
+            <Link color="success">Completed</Link>
           </NavbarItem>
         </NavbarContent>
 
         <NavbarContent justify="end">
           <NavbarItem className="hidden lg:flex">
-            <Link href="#">Login</Link>
+            <Button onClick={() => route("/login")}>Login</Button>
           </NavbarItem>
           <NavbarItem>
             <Button
               onClick={() => route("/register")}
               as={Link}
               color="success"
-              // href="/register"
             >
               Sign Up
             </Button>
