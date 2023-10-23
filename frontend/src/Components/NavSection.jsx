@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Navbar,
   NavbarBrand,
@@ -12,16 +12,14 @@ import {
 } from "@nextui-org/react";
 
 import { useNavigate } from "react-router-dom";
+import { MyContext } from "./Context/TaskContext";
 
 const NavSection = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const route = useNavigate();
+  const { state, logout } = useContext(MyContext);
 
-  const menuItems = [
-    "Profile",
-    "System",
-    "Log Out",
-  ];
+  const menuItems = ["Profile", "System", "Log Out"];
   return (
     <>
       <Navbar
@@ -51,21 +49,23 @@ const NavSection = () => {
           <NavbarItem>
             <Link color="success">Completed</Link>
           </NavbarItem>
+          <NavbarItem>
+            <Link color="danger">Deleted</Link>
+          </NavbarItem>
         </NavbarContent>
 
         <NavbarContent justify="end">
-          <NavbarItem className="hidden lg:flex">
-            <Button onClick={() => route("/login")}>Login</Button>
-          </NavbarItem>
-          <NavbarItem>
-            <Button
-              onClick={() => route("/register")}
-              as={Link}
-              color="success"
-            >
-              Sign Up
-            </Button>
-          </NavbarItem>
+          {!state?.currentuser?.name ? (
+            <NavbarItem className="hidden lg:flex">
+              <Button onClick={() => route("/login")}>Login</Button>
+            </NavbarItem>
+          ) : (
+            <NavbarItem>
+              <Button onClick={logout} color="success">
+                Logout
+              </Button>
+            </NavbarItem>
+          )}
         </NavbarContent>
 
         <NavbarMenu>

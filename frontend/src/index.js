@@ -5,19 +5,32 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { NextUIProvider } from "@nextui-org/react";
 import { BrowserRouter } from "react-router-dom";
-import { Provider } from "react-redux";
-import store from "./Store/Store";
+import TaskContext from "./Components/Context/TaskContext";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
+    <ToastContainer
+      position="top-right"
+      autoClose={500}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+      theme="light"
+    />
+    <TaskContext>
       <BrowserRouter>
         <NextUIProvider>
           <App />
         </NextUIProvider>
       </BrowserRouter>
-    </Provider>
+    </TaskContext>
   </React.StrictMode>
 );
 

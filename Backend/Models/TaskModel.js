@@ -9,9 +9,6 @@ const taskSchema = new Schema(
     description: {
       type: String,
     },
-    dueDate: {
-      type: String,
-    },
     priority: {
       type: String,
       enum: ["High", "Medium", "Low"],
@@ -23,9 +20,6 @@ const taskSchema = new Schema(
       default: "New",
     },
 
-    categories: {
-      type: String,
-    },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Users",

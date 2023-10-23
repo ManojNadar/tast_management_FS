@@ -7,7 +7,7 @@ export const addTask = async (req, res) => {
     const { title, categories, description, dueDate, priority, status, token } =
       req.body;
 
-    // console.log(title, image, description, categories);
+    // console.log(title);
 
     if (!title) {
       return res.status(404).json({
@@ -44,10 +44,11 @@ export const addTask = async (req, res) => {
     });
 
     await newTask.save();
+    const afterAddedTask = await Task.find({});
     return res.status(201).json({
       success: true,
       message: "new task added success",
-      newTask: newTask,
+      afterAddedTask: afterAddedTask,
     });
   } catch (error) {
     return res.status(500).json({
@@ -141,16 +142,11 @@ export const getEditTask = async (req, res) => {
 
 export const updateTask = async (req, res) => {
   try {
-    const {
-      title,
-      description,
-      dueDate,
-      priority,
-      status,
-      categories,
-      token,
-      id,
-    } = req.body;
+    const { title, description, priority, status } = req.body.getEditDetails;
+
+    const { token, id } = req.body;
+
+    console.log(title, description, priority, status, token, id);
 
     if (!token || !id)
       return res
@@ -181,7 +177,6 @@ export const updateTask = async (req, res) => {
       {
         title,
         description,
-        dueDate,
         priority,
         status,
         categories,
@@ -271,5 +266,3 @@ export const deleteTask = async (req, res) => {
     });
   }
 };
-
-

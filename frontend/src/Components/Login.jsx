@@ -1,8 +1,9 @@
 import { Button, Input } from "@nextui-org/react";
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { LoginUser } from "../Store/UserSlice";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import api from "./AuthConfig/Api";
+import { toast } from "react-toastify";
+import { MyContext } from "./Context/TaskContext";
 
 const Login = () => {
   const [user, setUser] = useState({
@@ -10,27 +11,46 @@ const Login = () => {
     password: "",
   });
   const route = useNavigate();
-  const dispatch = useDispatch();
+  const { state, login } = useContext(MyContext);
 
   // console.log(user);
+
+  useEffect(() => {
+    if (state?.currentuser) {
+      route("/");
+    }
+  }, [state?.currentuser, route]);
 
   const handleChange = (e) => {
     const { value, name } = e.target;
     setUser({ ...user, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const { email, password } = user;
 
     if (email && password) {
-      dispatch(LoginUser(user));
+      try {
+        const response = await api.post("/login", { user });
 
-      setUser({
-        email: "",
-        password: "",
-      });
-      route("/");
+        if (response.data.success) {
+          toast.success(response.data.message);
+
+          const userData = response.data.userData;
+          const token = response.data.token;
+          login(userData, token);
+          setUser({
+            email: "",
+            password: "",
+          });
+          route("/");
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error(error.message);
+      }
     } else {
       alert("all fields are mandatory");
     }
