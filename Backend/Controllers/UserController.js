@@ -137,3 +137,89 @@ export const currentuser = async (req, res) => {
     });
   }
 };
+
+export const completedTask = async (req, res) => {
+  try {
+    const { token } = req.body;
+
+    // console.log(title, image, description, categories);
+
+    if (!token)
+      return res
+        .status(404)
+        .json({ success: false, message: "token is required" });
+
+    const decodeToken = jwt.verify(token, process.env.SECRET_KEY);
+
+    if (!decodeToken) {
+      return res
+        .status(404)
+        .json({ success: false, message: "not a valid token" });
+    }
+
+    const userId = decodeToken?.userId;
+
+    const user = await User.findById(userId);
+    // console.log(completedTask);
+
+    if (user) {
+      return res.status(200).json({
+        success: true,
+        completedTask: user.completedTask,
+      });
+    }
+
+    return res.status(404).json({
+      success: false,
+      message: "no task Found",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const deletedTask = async (req, res) => {
+  try {
+    const { token } = req.body;
+
+    // console.log(title, image, description, categories);
+
+    if (!token)
+      return res
+        .status(404)
+        .json({ success: false, message: "token is required" });
+
+    const decodeToken = jwt.verify(token, process.env.SECRET_KEY);
+
+    if (!decodeToken) {
+      return res
+        .status(404)
+        .json({ success: false, message: "not a valid token" });
+    }
+
+    const userId = decodeToken?.userId;
+
+    const user = await User.findById(userId);
+    // console.log(completedTask);
+
+    if (completedTask) {
+      return res.status(200).json({
+        success: true,
+        deletedTask: user.deletedTask,
+      });
+    }
+
+    return res.status(404).json({
+      success: false,
+      message: "no task Found",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};

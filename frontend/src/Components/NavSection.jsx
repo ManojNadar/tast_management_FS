@@ -19,7 +19,7 @@ const NavSection = () => {
   const route = useNavigate();
   const { state, logout } = useContext(MyContext);
 
-  const menuItems = ["Profile", "System", "Log Out"];
+  const menuItems = ["Profile", "Log Out"];
   return (
     <>
       <Navbar
@@ -39,29 +39,35 @@ const NavSection = () => {
           </NavbarBrand>
         </NavbarContent>
 
-        <NavbarContent className="hidden sm:flex gap-4" justify="center">
-          <NavbarBrand>
-            <p className="font-bold text-inherit">Task Management</p>
+        <NavbarContent className="hidden sm:flex gap-5" justify="center">
+          <NavbarBrand onClick={() => route("/")} className="cursor-pointer">
+            <p className="font-bold text-2xl text-inherit">Task Management</p>
           </NavbarBrand>
-          <NavbarItem>
-            <Link>All Task</Link>
+          <NavbarItem className="cursor-pointer">
+            <Link
+              onClick={() => route("/completed")}
+              className="text-green-500 font-bold tracking-widest"
+            >
+              Completed
+            </Link>
           </NavbarItem>
-          <NavbarItem>
-            <Link color="success">Completed</Link>
-          </NavbarItem>
-          <NavbarItem>
-            <Link color="danger">Deleted</Link>
+          <NavbarItem className="cursor-pointer font-bold tracking-widest">
+            <Link onClick={() => route("/deleted")} color="danger">
+              Deleted
+            </Link>
           </NavbarItem>
         </NavbarContent>
 
         <NavbarContent justify="end">
           {!state?.currentuser?.name ? (
             <NavbarItem className="hidden lg:flex">
-              <Button onClick={() => route("/login")}>Login</Button>
+              <Button color="primary" onClick={() => route("/login")}>
+                Login
+              </Button>
             </NavbarItem>
           ) : (
             <NavbarItem>
-              <Button onClick={logout} color="success">
+              <Button onClick={logout} color="danger">
                 Logout
               </Button>
             </NavbarItem>
@@ -80,7 +86,6 @@ const NavSection = () => {
                     ? "danger"
                     : "foreground"
                 }
-                href="#"
                 size="lg"
               >
                 {item}

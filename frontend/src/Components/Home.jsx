@@ -14,7 +14,7 @@ const Home = () => {
   });
   // console.log(title);
   // console.log(myTask);
-  console.log(getEditDetails);
+  // console.log(getEditDetails);
   const { state } = useContext(MyContext);
 
   const assignTask = async () => {
@@ -119,67 +119,88 @@ const Home = () => {
     <>
       {editModal ? (
         <div className="w-full h-screen fixed top-0 left-0 bg-transparent z-50 flex justify-center items-center">
-          <div className="w-7/12 h-unit-8xl bg-slate-500 relative">
+          <div className="w-7/12 h-unit-8xl bg-blue-500 rounded-2xl relative p-5">
             <div
-              className="absolute right-5 top-2 font-extrabold"
+              className="absolute right-5 top-2 font-extrabold text-warning-300 cursor-pointer"
               onClick={() => setEditModal(false)}
             >
               X
             </div>
-            <div>
-              <Input
-                onChange={handleEditChange}
-                value={getEditDetails.title}
-                isDisabled
-                name="title"
-              />
-              <Textarea
-                onChange={handleEditChange}
-                placeholder="Enter Description"
-                value={getEditDetails.description}
-                name="description"
-              />
-              <Input
-                type="date"
-                value={getEditDetails.dueDate}
-                onChange={handleEditChange}
-                name="dueDate"
-              />
 
-              <RadioGroup
-                onChange={handleEditChange}
-                label="Priority"
-                color="primary"
-                value={getEditDetails.priority}
-                name="priority"
-              >
-                <div className="flex">
-                  <Radio value="High">High</Radio>
-                  <Radio value="Medium">Medium</Radio>
-                  <Radio value="Low">Low</Radio>
-                </div>
-              </RadioGroup>
-              <RadioGroup
-                name="status"
-                value={getEditDetails.status}
-                label="Status"
-                color="primary"
-                onChange={handleEditChange}
-              >
-                <div className="flex">
-                  <Radio value="New">New</Radio>
-                  <Radio value="Progress">Progress</Radio>
-                  <Radio value="Completed">Completed</Radio>
-                </div>
-              </RadioGroup>
+            {/* ---- */}
+            <div className="flex w-11/12 h-5/6 justify-around ml-auto mr-auto">
+              <div className="w-full">
+                <Input
+                  onChange={handleEditChange}
+                  value={getEditDetails.title}
+                  isDisabled
+                  name="title"
+                  className="w-11/12 ml-auto mr-auto"
+                />
+                <Textarea
+                  variant="faded"
+                  label="Description"
+                  placeholder="Enter your description"
+                  description="Enter a concise description of your project."
+                  className="w-11/12 mt-2 ml-auto mr-auto"
+                  minRows={10}
+                  onChange={handleEditChange}
+                  value={getEditDetails.description}
+                  name="description"
+                />
+                <div className="text-white pl-5 mt-3 font-bold">Due Date</div>
+                <Input
+                  type="date"
+                  value={getEditDetails.dueDate}
+                  onChange={handleEditChange}
+                  name="dueDate"
+                  className="w-11/12 ml-5 mt-2"
+                />
+              </div>
 
-              <Button
-                color="warning"
-                onClick={() => updateTask(getEditDetails._id)}
-              >
-                Update Task
-              </Button>
+              <div className="w-full">
+                <div className="mt-3 mb-4 text-white font-bold tracking-wider pl-3">
+                  Priority
+                </div>
+                <RadioGroup
+                  onChange={handleEditChange}
+                  color="warning"
+                  value={getEditDetails.priority}
+                  name="priority"
+                >
+                  <div className="flex justify-around w-full">
+                    <Radio value="High">High</Radio>
+                    <Radio value="Medium">Medium</Radio>
+                    <Radio value="Low">Low</Radio>
+                  </div>
+                </RadioGroup>
+
+                <div className="mt-3 mb-4 text-white font-bold tracking-wider pl-3">
+                  Status
+                </div>
+
+                <RadioGroup
+                  name="status"
+                  value={getEditDetails.status}
+                  color="warning"
+                  onChange={handleEditChange}
+                >
+                  <div className="flex justify-around w-full">
+                    <Radio value="New">New</Radio>
+                    <Radio value="Progress">Progress</Radio>
+                    <Radio value="Completed">Completed</Radio>
+                  </div>
+                </RadioGroup>
+              </div>
             </div>
+
+            <Button
+              color="warning"
+              onClick={() => updateTask(getEditDetails._id)}
+              className="w-11/12 ml-10 mt-5"
+            >
+              Update Task
+            </Button>
           </div>
         </div>
       ) : null}
@@ -203,13 +224,13 @@ const Home = () => {
 
           {myTask?.length ? (
             <div className="w-11/12 flex justify-between mt-2 ml-auto mr-auto text-xl font-extrabold">
-              <div className="w-5/12">Title Name</div>
+              <div className="w-5/12 tracking-wide pl-4">Title Name</div>
               <div className="w-7/12 flex justify-around">
-                <div>DueDate</div>
-                <div>Priority</div>
-                <div>Status</div>
-                <div>Edit</div>
-                <div>Delete</div>
+                <div className="w-2/12 text-center">DueDate</div>
+                <div className="w-2/12 text-center">Priority</div>
+                <div className="w-2/12 text-center">Status</div>
+                <div className="w-2/12 text-center">Edit</div>
+                <div className="w-2/12 text-center">Delete</div>
               </div>
             </div>
           ) : null}
@@ -222,20 +243,30 @@ const Home = () => {
                     key={task._id}
                     className="w-full flex justify-between bg-slate-500 mt-2 p-5"
                   >
-                    <div className="w-5/12">{task.title}</div>
+                    <div className="w-5/12 text-white font-bold tracking-widest">
+                      {task.title}
+                    </div>
                     <div className="w-7/12 flex justify-around">
-                      <div>{task.dueDate}</div>
-                      <div>{task.priority}</div>
-                      <div>{task.status}</div>
+                      <div className="w-2/12 text-white font-bold pl-5">
+                        {task.dueDate}
+                      </div>
+                      <div className="w-2/12 text-white font-bold pl-8">
+                        {task.priority}
+                      </div>
+                      <div className="w-2/12 pl-4 text-white font-bold">
+                        {task.status}
+                      </div>
                       <Button
                         color="secondary"
                         onClick={() => getEditTask(task._id)}
+                        className="w-1/12 mr-10"
                       >
                         Edit
                       </Button>
                       <Button
                         onClick={() => deleteTask(task._id)}
                         color="danger"
+                        className="w-1/12"
                       >
                         Delete
                       </Button>

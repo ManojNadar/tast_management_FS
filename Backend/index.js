@@ -3,7 +3,13 @@ import morgan from "morgan";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
-import { currentuser, login, register } from "./Controllers/UserController.js";
+import {
+  completedTask,
+  currentuser,
+  deletedTask,
+  login,
+  register,
+} from "./Controllers/UserController.js";
 import {
   addTask,
   deleteTask,
@@ -32,6 +38,8 @@ app.post("/mytask", UserMiddleWare, myTask);
 app.post("/getedittask", UserMiddleWare, getEditTask);
 app.post("/updatetask", UserMiddleWare, updateTask);
 app.post("/deletetask", UserMiddleWare, deleteTask);
+app.post("/completedtask", UserMiddleWare, completedTask);
+app.post("/deletedtask", UserMiddleWare, deletedTask);
 
 mongoose
   .connect(process.env.MONGO_URL)
