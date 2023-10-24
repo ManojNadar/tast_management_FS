@@ -54,7 +54,7 @@ const Register = () => {
   };
   return (
     <>
-      <div>
+      <div className="w-7/12 ml-auto mr-auto">
         <form onSubmit={handleSubmit}>
           <Input
             type="text"

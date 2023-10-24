@@ -142,11 +142,12 @@ export const getEditTask = async (req, res) => {
 
 export const updateTask = async (req, res) => {
   try {
-    const { title, description, priority, status } = req.body.getEditDetails;
+    const { title, description, priority, status, dueDate } =
+      req.body.getEditDetails;
 
     const { token, id } = req.body;
 
-    console.log(title, description, priority, status, token, id);
+    console.log(title, description, priority, status, token, id, dueDate);
 
     if (!token || !id)
       return res
@@ -179,7 +180,7 @@ export const updateTask = async (req, res) => {
         description,
         priority,
         status,
-        categories,
+        dueDate,
         isCompletedTask: flag,
       },
       {
@@ -195,17 +196,21 @@ export const updateTask = async (req, res) => {
           user.completedTask.push(afterComplete);
           await user.save();
 
+          const updatedTask = await Task.find({});
+
           return res.status(200).json({
             success: true,
-            afterComplete: afterComplete,
+            updatedTask: updatedTask,
+            message: "Task Completed Success",
           });
         }
       }
 
-      await task.save();
+      const updatedTask = await Task.find({});
       return res.status(200).json({
         success: true,
-        updatedTask: task,
+        updatedTask: updatedTask,
+        message: "Updated Success",
       });
     }
 

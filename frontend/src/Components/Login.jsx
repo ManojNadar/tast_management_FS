@@ -52,29 +52,34 @@ const Login = () => {
         toast.error(error.message);
       }
     } else {
-      alert("all fields are mandatory");
+      toast.error("all fields are mandatory");
     }
   };
   return (
     <>
-      <div>
+      <div className="w-7/12 ml-auto mr-auto mt-5">
         <form onSubmit={handleSubmit}>
           <Input
             type="email"
-            className="border border-black-600"
+            className="w-7/12 ml-auto mr-auto mt-5"
             onChange={handleChange}
             value={user.email}
             name="email"
           />
           <Input
             type="password"
-            className="border border-black-600"
+            className="w-7/12 ml-auto mr-auto mt-5"
             onChange={handleChange}
             value={user.password}
             name="password"
           />
 
-          <Button type="submit" variant="ghost" color="danger">
+          <Button
+            className="w-7/12 ml-auto mr-auto mt-5"
+            type="submit"
+            variant="ghost"
+            color="danger"
+          >
             Login
           </Button>
         </form>

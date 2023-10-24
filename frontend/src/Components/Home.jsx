@@ -1,17 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import NavSection from "./NavSection";
 import { Input, Button, Textarea, Radio, RadioGroup } from "@nextui-org/react";
 import api from "./AuthConfig/Api";
 import { toast } from "react-toastify";
+import { MyContext } from "./Context/TaskContext";
 
 const Home = () => {
   const [title, setTitle] = useState("");
   const [myTask, setMyTask] = useState([]);
   const [editModal, setEditModal] = useState(false);
-  const [getEditDetails, setGetEditDetails] = useState({});
+  const [getEditDetails, setGetEditDetails] = useState({
+    dueDate: "",
+  });
   // console.log(title);
   // console.log(myTask);
-  // console.log(getEditDetails);
+  console.log(getEditDetails);
+  const { state } = useContext(MyContext);
 
   const assignTask = async () => {
     try {
@@ -48,7 +52,7 @@ const Home = () => {
   }, []);
 
   const getEditTask = async (id) => {
-    console.log(id);
+    // console.log(id);
     setEditModal(true);
 
     try {
@@ -70,7 +74,7 @@ const Home = () => {
     setGetEditDetails({ ...getEditDetails, [name]: value });
   };
 
-  const submitTask = async (id) => {
+  const updateTask = async (id) => {
     try {
       const token = JSON.parse(localStorage.getItem("tasktoken"));
       const response = await api.post("/updateTask", {
@@ -82,11 +86,13 @@ const Home = () => {
       if (response.data.success) {
         toast.success(response.data.message);
         setEditModal(false);
+        setGetEditDetails({});
+        setMyTask(response.data.updatedTask);
       } else {
         toast.error(response.data.message);
       }
     } catch (error) {
-      console.log(error);
+      toast.error(error.response.data.message);
     }
   };
 
@@ -120,7 +126,6 @@ const Home = () => {
             >
               X
             </div>
-
             <div>
               <Input
                 onChange={handleEditChange}
@@ -133,6 +138,12 @@ const Home = () => {
                 placeholder="Enter Description"
                 value={getEditDetails.description}
                 name="description"
+              />
+              <Input
+                type="date"
+                value={getEditDetails.dueDate}
+                onChange={handleEditChange}
+                name="dueDate"
               />
 
               <RadioGroup
@@ -162,8 +173,11 @@ const Home = () => {
                 </div>
               </RadioGroup>
 
-              <Button color="warning" onClick={submitTask}>
-                Submit Task
+              <Button
+                color="warning"
+                onClick={() => updateTask(getEditDetails._id)}
+              >
+                Update Task
               </Button>
             </div>
           </div>
@@ -171,65 +185,74 @@ const Home = () => {
       ) : null}
       <NavSection />
 
-      <div className="flex w-6/12 justify-around mt-4 ml-auto mr-auto">
-        <Input
-          type="email"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder="Add Task"
-          className="w-8/12 outline-1 outline-primary-50"
-        />
+      {state?.currentuser ? (
+        <div>
+          <div className="flex w-6/12 justify-around mt-4 ml-auto mr-auto">
+            <Input
+              type="email"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Add Task"
+              className="w-8/12 outline-1 outline-primary-50"
+            />
 
-        <Button color="success" className="w-2/12" onClick={assignTask}>
-          Assign Task
-        </Button>
-      </div>
+            <Button color="success" className="w-2/12" onClick={assignTask}>
+              Assign Task
+            </Button>
+          </div>
 
-      {myTask?.length ? (
-        <div className="w-11/12 flex justify-between mt-2 ml-auto mr-auto text-xl font-extrabold">
-          <div className="w-5/12">Title Name</div>
-          <div className="w-7/12 flex justify-around">
-            <div>DueDate</div>
-            <div>Priority</div>
-            <div>Status</div>
-            <div>Edit</div>
-            <div>Delete</div>
+          {myTask?.length ? (
+            <div className="w-11/12 flex justify-between mt-2 ml-auto mr-auto text-xl font-extrabold">
+              <div className="w-5/12">Title Name</div>
+              <div className="w-7/12 flex justify-around">
+                <div>DueDate</div>
+                <div>Priority</div>
+                <div>Status</div>
+                <div>Edit</div>
+                <div>Delete</div>
+              </div>
+            </div>
+          ) : null}
+
+          <div className="w-11/12 mt-10 ml-auto mr-auto">
+            {myTask?.length ? (
+              <div>
+                {myTask?.map((task) => (
+                  <div
+                    key={task._id}
+                    className="w-full flex justify-between bg-slate-500 mt-2 p-5"
+                  >
+                    <div className="w-5/12">{task.title}</div>
+                    <div className="w-7/12 flex justify-around">
+                      <div>{task.dueDate}</div>
+                      <div>{task.priority}</div>
+                      <div>{task.status}</div>
+                      <Button
+                        color="secondary"
+                        onClick={() => getEditTask(task._id)}
+                      >
+                        Edit
+                      </Button>
+                      <Button
+                        onClick={() => deleteTask(task._id)}
+                        color="danger"
+                      >
+                        Delete
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="flex justify-center">No Task</div>
+            )}
           </div>
         </div>
-      ) : null}
-
-      <div className="w-11/12 mt-10 ml-auto mr-auto">
-        {myTask?.length ? (
-          <div>
-            {myTask?.map((task) => (
-              <>
-                <div
-                  key={task._id}
-                  className="w-full flex justify-between bg-slate-500 mt-2 p-5"
-                >
-                  <div className="w-5/12">{task.title}</div>
-                  <div className="w-7/12 flex justify-around">
-                    <div>23 - 10 - 2023</div>
-                    <div>{task.priority}</div>
-                    <div>{task.status}</div>
-                    <Button
-                      color="secondary"
-                      onClick={() => getEditTask(task._id)}
-                    >
-                      Edit
-                    </Button>
-                    <Button onClick={() => deleteTask(task._id)} color="danger">
-                      Delete
-                    </Button>
-                  </div>
-                </div>
-              </>
-            ))}
-          </div>
-        ) : (
-          <div className="flex justify-center">No Task</div>
-        )}
-      </div>
+      ) : (
+        <div className="flex justify-center text-2xl font-extrabold mt-5">
+          Please Login To See the Task
+        </div>
+      )}
     </>
   );
 };

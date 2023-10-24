@@ -19,6 +19,9 @@ const taskSchema = new Schema(
       enum: ["New", "Progress", "Completed"],
       default: "New",
     },
+    dueDate: {
+      type: String,
+    },
 
     userId: {
       type: mongoose.Schema.Types.ObjectId,
